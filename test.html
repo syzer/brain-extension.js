@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>q-learning.js test 2</title>
+    <meta name="description" content="Neural network application to learning in a game">
+    <meta name="keywords" content="Neural network, javascript, game">
+    <style>
+        body {
+            font-family: monospace;
+            font-size: 120%;
+            padding: 5%;
+        }
+        canvas {
+            border: 2px solid black;
+            width: 300px;
+            margin: 1% auto 1% auto;
+            display: block;
+        }
+        #buttons {
+            width: 300px;
+            margin: auto;
+            display: block;
+        }
+
+        #buttons * {
+            width: 25%;
+        }
+
+        #score {
+            text-align: right;
+        }
+    </style>
+    <script src="lib/underscore.js"></script>
+    <script src="lib/brain-0.6.0.js"></script>
+    <script src="brain-extension.js"></script>
+</head>
+<body>
+<h2>brain.js neural network demo</h2>
+<p>
+    <a href="https://github.com/nrox/brain-extension.js">GitHub repo</a>
+</p>
+<p>
+    We are using a <b>neural network</b> to predict the outcome of an action, applied to a game. The neural network used is brain.js
+    with brain-extension.js to simplify data normalization. The method is simple and works.
+</p>
+<canvas id="canvas" width="300px" height="300px"></canvas>
+<div id="buttons">
+    <button onclick="withoutBrains()">without brains</button>
+    <button onclick="trainAndRun()">with brain.js</button>
+    <button onclick="stop()">stop</button>
+    <span id="score"></span>
+</div>
+<p>
+    The black circle represent an agent. A green circle represent food (+1 reward) and a gray represent poison (-1 reward).
+    Empty cells have 0 reward. Food and poison are inserted with the same probability.
+    The agent can move left, right or stay. The input to the neural network is an array of numbers representing the objects
+    in the 3 squares immediately in front of the agent, and the action taken. The output is the reward for that input (that action in that state).
+</p>
+<p>
+    To train the network we need to gather data. We let the game simply run in the backend, gathering an array of inputs and outputs, with the
+    agent taking random actions. To avoid
+    over-fitting, we consider just unique input output pairs without repetition. With this, the number of possible input and output pairs are
+    roughly bounded to less than 3^5=243 possibilities. 3x3x3 (states) x 3 actions x 3 outputs.
+</p>
+<p>
+    After the training, we can use the network to predict rewards, and thus the action to take to maximize the immediate reward.
+    When choosing the action to take, we need to run the network 3 times. We take the current state, and we construct 3 inputs, with that state,
+    and with those 3 optional actions, left, right and stay. Running these inputs trough the network, the action to take is the one with most output (reward).
+</p>
+
+<p>
+    Check the GitHub repository and the file test.js for this example.
+</p>
+<script src="test.js"></script>
+</body>
+</html>
